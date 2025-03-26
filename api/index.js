@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://implies-frontend.vercel.app",
     methods: ["PUT", "PATCH", "GET", "POST", "DELETE"],
     allowedHeaders: ["Content-type", "Authorization"],
     // credentials:true,
