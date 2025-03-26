@@ -7,6 +7,14 @@ UserRouter.post("/signup", async (req, res) => {
   const { email, name, password } = req.body;
   try {
     const hashedPassword = bcrypt.hashSync(password, 5);
+    // checking if such user already exists
+    const userAlreadyExists = await UserModel.findOne({ email });
+    if (userAlreadyExists) {
+      res
+        .status(400)
+        .json({ message: "email id already registered", success: false });
+      return;
+    }
     // creating new user
     const newUser = new UserModel({ name, email, password: hashedPassword });
     const newUserCreated = await newUser.save();
@@ -14,7 +22,9 @@ UserRouter.post("/signup", async (req, res) => {
       res.status(201).json({ message: "new user created", success: true });
       return;
     } else {
-      res.status(401).json({ message: "new user created", success: false });
+      res
+        .status(401)
+        .json({ message: "Failed to create new User", success: false });
       return;
     }
   } catch (err) {
@@ -63,7 +73,7 @@ UserRouter.post("/JWT", async (req, res) => {
   try {
     var decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log(decoded);
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, decoded });
     return;
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
