@@ -94,6 +94,7 @@ CampanyRouter.patch("/", AuthJWT, async (req, res) => {
       },
       { new: true }
     );
+    console.log(`updated updatedCampanyDetails`, updatedCampanyDetails);
     if (updatedCampanyDetails) {
       res.status(200).json({
         message: "successfully updated",
